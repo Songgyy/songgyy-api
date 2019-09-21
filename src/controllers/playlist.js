@@ -1,6 +1,5 @@
 const User = require('../model/User')
 const jwt = require('jsonwebtoken')
-const config = require('./../config/auth.json')
 const Playlist = require('./../model/Playlist')
 
 module.exports = {

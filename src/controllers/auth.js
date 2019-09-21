@@ -1,9 +1,9 @@
 const User = require('../model/User')
 const jwt = require('jsonwebtoken')
-const config = require('./../config/auth.json')
+const config = require('../config.json')
 
 const generateToken = (params = {}) => {
-  return jwt.sign(params, config.secret)
+  return jwt.sign(params, config.app_secret)
 }
 
 module.exports = {
