@@ -9,9 +9,11 @@
   "author": "Gabriel Petry",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mysql2": "^1.7.0"
+    "mongoose": "^5.7.1",
+    "saslprep": "^1.0.3"
   }
 }
