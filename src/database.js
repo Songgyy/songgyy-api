@@ -1,14 +1,18 @@
-const mysql = require('mysql2/promise')
-const config = require('./config/auth.json')
+const mongoose = require('mongoose')
+const { db_host,
+        db_user,
+        db_password,
+        db_database } = require('./config.json');
 
-const connection = mysql.createPool({
-  host: config.db_host,
-  user: config.db_user,
-  password: config.db_password,
-  database: config.db_database,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
 
-module.exports = connection
+console.log(db_password)
+const db = mongoose.connect(
+  `mongodb://${db_host}:27017/${db_database}`, {
+    user: db_user,
+    pass: db_password,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  }
+);
+module.exports = db;
