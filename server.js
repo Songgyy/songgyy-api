@@ -1,33 +1,23 @@
 const express = require('express')
 const routes = require('./src/routes')
 const cors = require('cors')
+const db = require('./src/database')
 
-// const app = express()
+// create connection
+
 const app = express()
-// const server = require('http').Server(app)
-// const io = require('socket.io')(server)
+
+// get the destination port
 const port = process.env.PORT || 3333
 
-
-// const connectUsers = {}
-
-// io.on('connection', socket => {
-//   // console.log('Nova conexão', socket.id)
-//   const { user } = socket.handshake.query
-//   connectUsers[user] = socket.id
-//   console.log(user, socket.id)
-// })
-
-// app.use((req, res, next) => {
-//   req.io = io
-//   req.connectUsers = connectUsers
-
-//   return next()
-// })
-
+// cors?
 app.use(cors())
+// use json, please
 app.use(express.json())
+// use routes, please
 app.use(routes)
 
+// listen to a port
 app.listen(port)
+// logs a pretty message.
 console.log(`listening on port ${port}`)
