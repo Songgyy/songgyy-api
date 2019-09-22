@@ -8,8 +8,8 @@ const GuildController = require('./controllers/guild')
 const routes = express.Router();
 
 // users routse
-routes.post('/authenticate', AuthController.auth);
 routes.post('/users/', UserController.store);
+routes.post('/users/auth', UserController.auth);
 // guild routes
 routes.get('/guilds', authMiddleware, GuildController.list);
 routes.post('/guilds', authMiddleware, GuildController.store);
