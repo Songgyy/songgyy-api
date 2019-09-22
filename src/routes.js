@@ -16,7 +16,7 @@ routes.post(`${VERSION}/users/auth`, UserController.auth);
 routes.get(`${VERSION}/guilds`, authMiddleware, GuildController.list);
 routes.post(`${VERSION}/guilds`, authMiddleware, GuildController.store);
 // playlists routes
-routes.get(`${VERSION}/playlists/:playlist`, authMiddleware, PlaylistController.PlaylistSongs);
+routes.get(`${VERSION}/playlists/:playlist_name`, authMiddleware, PlaylistController.PlaylistSongs);
 routes.get(`${VERSION}/playlists`, authMiddleware, PlaylistController.index);
 routes.post(`${VERSION}/playlists`, authMiddleware, PlaylistController.store);
 // routes.delete(`${VERSION}/playlists`, authMiddleware, PlaylistController.remove);
