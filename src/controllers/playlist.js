@@ -17,13 +17,17 @@ module.exports = {
    },
    async store(req, res) {
       if (!req.body.name)
-         return res.status(500).send({ error: 'No name provided' })
+         return res.status(400).send({ error: 'No name provided' });
 
-      let result = await Playlist.new(req.body.name)
+      if (!req.body.guild_id)
+         return res.status(400).send({ error: 'No guild provided' });
+
+      const { name, guild_id } = req.body;
+      const result = await Playlist.new(name);
 
       if (!result.success)
-         return res.status(500).send(result)
+         return res.status(500).send({ result });
 
-      return result
+      return res.send({ result });
    }
 }
