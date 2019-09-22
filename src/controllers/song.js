@@ -1,14 +1,15 @@
 const User = require('../model/User')
 const jwt = require('jsonwebtoken')
-const Music = require('./../model/Song')
+const Song = require('./../model/Song')
+const Playlist = require('./../model/Playlist')
 
 module.exports = {
    async index(req, res) {
-      let songs = await Music.all()   
+      let songs = await Song.all()   
       return res.send({ songs })
    },
    async get(req, res) {
-      let songs = await Music.get(req.params.playlist)
+      let songs = await Song.get(req.params.playlist)
       return res.send({ songs })
    },
    async store(req, res) {
