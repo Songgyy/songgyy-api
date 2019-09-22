@@ -21,7 +21,7 @@ routes.post('/playlists', authMiddleware, PlaylistController.store);
 // songs routes
 routes.get('/songs', authMiddleware, SongController.index);
 routes.get('/songs/:playlist', authMiddleware, SongController.get);
-// routes.post('/songs', authMiddleware, SongController.store);
+routes.post('/songs', authMiddleware, SongController.store);
 // routes.delete('/songs', authMiddleware, SongController.remove);
 
 module.exports = routes;
