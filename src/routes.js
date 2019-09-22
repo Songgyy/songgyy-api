@@ -1,7 +1,7 @@
 const express = require('express');
 const AuthController = require('./controllers/auth');
 const PlaylistController = require('./controllers/playlist');
-const MusicController = require('./controllers/music');
+const SongController = require('./controllers/song');
 const authMiddleware = require('./middlewares/auth');
 const UserController = require('./controllers/user')
 const GuildController = require('./controllers/guild')
@@ -19,9 +19,9 @@ routes.get('/playlists', authMiddleware, PlaylistController.index);
 routes.post('/playlists', authMiddleware, PlaylistController.store);
 // routes.delete('/playlists', authMiddleware, PlaylistController.remove);
 // songs routes
-routes.get('/songs', authMiddleware, MusicController.index);
-routes.get('/songs/:playlist', authMiddleware, MusicController.get);
-// routes.post('/songs', authMiddleware, MusicController.store);
-// routes.delete('/songs', authMiddleware, MusicController.remove);
+routes.get('/songs', authMiddleware, SongController.index);
+routes.get('/songs/:playlist', authMiddleware, SongController.get);
+// routes.post('/songs', authMiddleware, SongController.store);
+// routes.delete('/songs', authMiddleware, SongController.remove);
 
 module.exports = routes;
