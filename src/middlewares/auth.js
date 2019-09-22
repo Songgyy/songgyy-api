@@ -1,30 +1,33 @@
-const jwt = require('jsonwebtoken')
-const config = require('../config.json')
+const jwt = require('jsonwebtoken');
+const config = require('../config.json');
+const User = require('./../model/User');
 
 module.exports = (req, res, next) => {
-  const authHeader = req.headers.authorization
+  const authHeader = req.headers.authorization;
 
   if (!authHeader)
-    return res.status(401).send({ error: "No token, no playlist" })
+    return res.status(401).send({ error: "Without token, withou access!" });
 
-  const parts = authHeader.split(' ')
+  const parts = authHeader.split(' ');
 
   if (!parts.length === 2)
-    return res.status(401).send({ error: "Token error" })
+    return res.status(401).send({ error: "Token error" });
 
-  const [ scheme, token ] = parts
+  const [ scheme, token ] = parts;
 
   if (!/^Bearer$/i.test(scheme))
-    return res.status(401).send({ error: "Malformed token" })
+    return res.status(401).send({ error: "Malformed token" });
 
 
-  jwt.verify(token, config.app_secret, (error, decoded) => {
+  jwt.verify(token, config.app_secret, async (error, decoded) => {
     if (error)
-      return res.status(401).send({ eror: "Invalid token" })
+      return res.status(401).send({ eror: "Invalid token" });
 
-    req.userId = decoded.id
+    let _id = decoded.id;
+    const user = await User.findOne({ _id });
+    req.user = user;
 
-    return next()
+    return next();
   })
 
 }
