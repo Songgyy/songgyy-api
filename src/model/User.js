@@ -22,7 +22,7 @@ const UserSchema = new Schema(
       required: true,
       type: String
     },
-    guild: [{
+    guilds: [{
         ref: 'Guild',
         type: Schema.Types.ObjectId
       }],
@@ -36,7 +36,7 @@ const UserSchema = new Schema(
 UserSchema.pre('save', function(next) {
   let user = this;
   // if no changse in password skip
-  if(!user.isModified('password')) return next;
+  if(!user.isModified('password')) return next();
 
   // generate a salt
   bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
@@ -53,7 +53,7 @@ UserSchema.pre('save', function(next) {
 });
 
 // Method to compare the passwords
-UserSchema.methods.comparePassword = (challenge, fn) => {
+UserSchema.methods.comparePassword = function(challenge, fn) {
   bcrypt.compare(challenge, this.password, (err, isMatch) => {
     if (err) return fn(err);
     fn(null, isMatch);
