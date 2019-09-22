@@ -5,12 +5,19 @@ const Playlist = require('./../model/Playlist')
 
 module.exports = {
    async index(req, res) {
+      let playlists = await Playlist.find({
+         $and: [
+            { guild: { $in: req.user.guilds } },
+            { active: true }
+         ]
+      });
       let songs = await Song.find({
          $and: [
+            { playlist: { $in: playlists }},
             { active: true },
          ]
-      })
-      return res.send({ songs })
+      });
+      return res.send({ songs });
    },
    async get(req, res) {
       let songs = await Song.get(req.params.playlist)
@@ -49,10 +56,10 @@ module.exports = {
          playlist: playlist
       });
 
-      result.save();
+      result.save().catch(err => console.log(err));
 
-      if (!result.success)
-         return res.status(500).send(result);
+      playlist.songs.push(result);
+      playlist.save().catch(err => console.log(err));
 
       return res.send(result);
    },
