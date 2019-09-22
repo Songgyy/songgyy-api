@@ -1,6 +1,7 @@
 const User = require('../model/User')
 const jwt = require('jsonwebtoken')
 const Playlist = require('./../model/Playlist')
+const Guild = require('./../model/Guild')
 
 module.exports = {
    async index(req, res) {
@@ -23,10 +24,16 @@ module.exports = {
          return res.status(400).send({ error: 'No guild provided' });
 
       const { name, guild_id } = req.body;
-      const result = await Playlist.new(name);
+      const guild = await Guild.findOne({ _id: guild_id })
+      const result = await Playlist({
+         name: name,
+         guild: guild_id
+      });
 
-      if (!result.success)
-         return res.status(500).send({ result });
+      result.save().catch(err => console.log(err));
+
+      guild.playlists.push(result);
+      guild.save();
 
       return res.send({ result });
    }
