@@ -5,8 +5,13 @@ const Guild = require('./../model/Guild')
 
 module.exports = {
    async index(req, res) {
-      let playlists = await Playlist.all()   
-      return res.send({ playlists })
+      let playlists = await Playlist.find({
+         $and: [
+            { guild: { $in: req.user.guilds } },
+            { active: true }
+         ]
+      });
+      return res.send({ playlists });
    },
    async get(req, res) {
       let playlist = await Playlist.get(req.params.name)
