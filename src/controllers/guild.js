@@ -1,4 +1,6 @@
 const Guild = require('../model/Guild')
+const User = require('../model/User')
+
 
 module.exports = {
   async raiseHttpError(res, message, status = 400) {
@@ -6,7 +8,8 @@ module.exports = {
   },
 
   async list(req, res) {
-    const { guilds } = req.user;
+
+    const { guilds } = await User.findById(req.user.id).populate('guilds')
     res.send({ guilds });
   },
 
