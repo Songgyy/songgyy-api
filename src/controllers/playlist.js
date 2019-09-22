@@ -20,7 +20,6 @@ module.exports = {
    async PlaylistSongs(req, res) {
       // let playlists = await Playlist.allWithSongs()
       const { playlist_name } = req.params
-      console.log(playlist_name);
       const playlist = await Playlist.find({
          $and: [
             { guild: { $in: req.user.guilds } },
