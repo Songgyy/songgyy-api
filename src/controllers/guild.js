@@ -6,31 +6,34 @@ module.exports = {
   },
 
   async list(req, res) {
-    return;
+    const { guilds } = req.user;
+    res.send({ guilds });
   },
 
   async store(req, res) {
     const self = module.exports
    
     if (!req.body.name)
-      return self.raiseHttpError(res, `No username provided`);
+      return self.raiseHttpError(res, `No guild name provided provided`);
 
     if (!req.body.guild_id)
-      return self.raiseHttpError(res, `No email provided`);
+      return self.raiseHttpError(res, `No guild_id provided`);
 
-    let guild_idExists = await User.findOne({ guild_id: req.body.email });
+    let guild_idExists = await Guild.findOne({ guild_id: req.body.email });
 
     if (guild_idExists)
-      return self.raiseHttpError(res, `Username already picked`);
+      return self.raiseHttpError(res, `Guild already registered`);
 
     const newGuild = new Guild({
       guild_id: req.body.guild_id,
-      name: req.body.name
+      guild_name: req.body.name
     });
 
-    await newGuild.save().catch(err => res.status(500).send(err));
+    await newGuild.save().catch(err => res.send({err}))
+    await req.user.guilds.push(newGuild._id);
+    await req.user.save();
 
-    res.send({ ok: true })
+    return await res.send({ ok: true, newGuild })
 
   }
-}
+} 
