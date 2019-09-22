@@ -2,10 +2,6 @@ const { Schema, model } = require('mongoose')
 
 const SongSchema = new Schema(
   {
-    name: {
-      required: true,
-      type: String,
-    },
     youtube_link: {
       required: true,
       type: String,
@@ -13,6 +9,10 @@ const SongSchema = new Schema(
     comment: {
       required: false,
       type: String,
+    },
+    active: {
+      default: true,
+      type: Boolean
     },
     playlist: {
       ref: 'Playlist',
