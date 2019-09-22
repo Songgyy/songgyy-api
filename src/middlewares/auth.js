@@ -21,10 +21,14 @@ module.exports = (req, res, next) => {
 
   jwt.verify(token, config.app_secret, async (error, decoded) => {
     if (error)
-      return res.status(401).send({ eror: "Invalid token" });
+      return res.status(401).send({ error: "Invalid token" });
 
     let _id = decoded.id;
     const user = await User.findOne({ _id });
+
+    if (!user)
+      return res.status(401).send({ error: "Invalid user" });
+
     req.user = user;
 
     return next();
