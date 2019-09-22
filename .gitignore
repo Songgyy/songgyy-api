@@ -1,5 +1,6 @@
 src/config/auth.json
 src/config/config.json
+src/config.json
 # Logs
 logs
 *.log
