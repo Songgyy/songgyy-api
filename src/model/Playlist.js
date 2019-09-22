@@ -6,6 +6,10 @@ const PlaylistSchema = new Schema(
       required: true,
       type: String
     },
+    active: {
+      default: true,
+      type: Boolean
+    },
     songs: [{
         ref: 'Song',
         type: Schema.Types.ObjectId
