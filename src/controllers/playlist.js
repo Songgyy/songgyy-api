@@ -1,6 +1,7 @@
 const User = require('../model/User')
 const jwt = require('jsonwebtoken')
 const Playlist = require('./../model/Playlist')
+const Song = require('./../model/Song')
 const Guild = require('./../model/Guild')
 
 module.exports = {
@@ -8,7 +9,6 @@ module.exports = {
       let playlists = await Playlist.find({
          $and: [
             { guild: { $in: req.user.guilds } },
-            { active: true }
          ]
       });
       return res.send({ playlists });
@@ -17,9 +17,16 @@ module.exports = {
       let playlist = await Playlist.get(req.params.name)
       return res.send({ playlist })
    },
-   async getWithSongs(req, res) {
-      let playlists = await Playlist.allWithSongs()
-      return res.send({playlists})
+   async PlaylistSongs(req, res) {
+      // let playlists = await Playlist.allWithSongs()
+      console.log(req.user);
+      const playlist = await Playlist.find({
+         $and: [
+            { guild: { $in: req.user.guilds } },
+            { active: true }
+         ],
+      }).populate('songs');
+      return res.send({playlist});
    },
    async store(req, res) {
       if (!req.body.name)
