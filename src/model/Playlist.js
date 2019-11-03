@@ -6,22 +6,28 @@ const PlaylistSchema = new Schema(
       required: true,
       type: String
     },
+    comment: {
+      required: false,
+      type: String
+    },
     active: {
       default: true,
       type: Boolean
     },
-    songs: [{
+    songs: [
+      {
         ref: 'Song',
         type: Schema.Types.ObjectId
-      }],
+      }
+    ],
     guild: {
       ref: 'Guild',
       type: Schema.Types.ObjectId
     }
   },
-    {
-      timestamps: true
-    }
+  {
+    timestamps: true
+  }
 )
 
 module.exports = model('Playlist', PlaylistSchema)

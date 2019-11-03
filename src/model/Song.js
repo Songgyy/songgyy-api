@@ -4,11 +4,11 @@ const SongSchema = new Schema(
   {
     youtube_link: {
       required: true,
-      type: String,
+      type: String
     },
     comment: {
       required: false,
-      type: String,
+      type: String
     },
     active: {
       default: true,
@@ -17,11 +17,16 @@ const SongSchema = new Schema(
     playlist: {
       ref: 'Playlist',
       type: Schema.Types.ObjectId
+    },
+    order: {
+      default: 10,
+      required: false,
+      type: Number
     }
   },
-    {
-      timestamps: true
-    }
+  {
+    timestamps: true
+  }
 )
 
 module.exports = model('Song', SongSchema)
