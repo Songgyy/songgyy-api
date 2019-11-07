@@ -20,7 +20,9 @@ module.exports = {
     const { playlist_name } = req.params
     const playlist = await Playlist.find({
       $and: [{ guild: { $in: req.user.guilds } }, { _id: playlist_name }, { active: true }]
-    }).populate('songs')
+    })
+      .populate('songs')
+      .sort(['order', 1])
     return res.send({ ...playlist })
   },
   async store(req, res) {
