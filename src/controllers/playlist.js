@@ -6,10 +6,23 @@ const Guild = require('./../model/Guild')
 
 module.exports = {
   async index(req, res) {
+    const { guild_id } = req.query
+
+    console.log(req.query)
+    if (guild_id) {
+      console.log('enviando somente playlists da', guild_id)
+      const { playlists } = await Guild.findOne({ guild_id }).populate({
+        path: 'playlists',
+        options: { $and: [{ active: true }] }
+      })
+      return await res.send({ playlists })
+    }
+
     let playlists = await Playlist.find({
-      $and: [{ guild: { $in: req.user.guilds } }]
+      $and: [{ guild: { $in: req.user.guilds } }, {}]
     })
-    return res.send({ playlists })
+
+    return await res.send({ playlists })
   },
   async get(req, res) {
     let playlist = await Playlist.get(req.params.name)
