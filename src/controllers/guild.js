@@ -16,14 +16,14 @@ module.exports = {
 
     if (!req.body.name) return self.raiseHttpError(res, `No guild name provided provided`)
 
-    if (!req.body.guild_id) return self.raiseHttpError(res, `No guild_id provided`)
+    if (!req.body.id) return self.raiseHttpError(res, `No guild_id: id provided`)
 
-    let guild_idExists = await Guild.findOne({ guild_id: req.body.email })
+    const guild_idExists = await Guild.findOne({ guild_id: req.body.email })
 
     if (guild_idExists) return self.raiseHttpError(res, `Guild already registered`)
 
     const newGuild = new Guild({
-      guild_id: req.body.guild_id,
+      guild_id: req.body.id,
       guild_name: req.body.name
     })
 
