@@ -18,6 +18,8 @@ module.exports = {
 
     if (!req.body.id) return self.raiseHttpError(res, `No guild_id: id provided`)
 
+    if (!req.body.userName) return self.raiseHttpError(res, `No username provided`)
+
     const guild_idExists = await Guild.findOne({ guild_id: req.body.email })
 
     if (guild_idExists) return self.raiseHttpError(res, `Guild already registered`)
@@ -27,9 +29,11 @@ module.exports = {
       guild_name: req.body.name
     })
 
+    const user = User.findOne({ username: req.body.username })
+
     await newGuild.save().catch(err => res.send({ err }))
-    await req.user.guilds.push(newGuild._id)
-    await req.user.save()
+    await user.guilds.push(newGuild._id)
+    await user.save()
 
     return await res.send({ ok: true, newGuild })
   }
