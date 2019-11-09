@@ -9,11 +9,14 @@ module.exports = {
     const { guild_id } = req.query
 
     if (guild_id) {
-      console.log('enviando somente playlists da', guild_id)
-      const { playlists } = await Guild.findOne({ guild_id }).populate({
-        path: 'playlists',
-        options: { $and: [{ active: true }] }
+      console.log(guild_id)
+      const guild = await Guild.findOne({ guild_id })
+      if (!guild) return await res.send({ playlists: [] })
+      const playlists = await Playlist.find({
+        $and: [{ guild: { $eq: guild._id } }, { active: true }]
       })
+
+      console.log(playlists)
 
       return await res.send({ playlists })
     } // end if
@@ -30,9 +33,11 @@ module.exports = {
   },
   async PlaylistSongs(req, res) {
     // let playlists = await Playlist.allWithSongs()
-    const { playlist_name } = req.params
+    const { playlist_name, guild_id } = req.params
+    console.log(guild_id)
+    const guild = await Guild.findOne({ guild_id })
     const playlist = await Playlist.find({
-      $and: [{ guild: { $in: req.user.guilds } }, { name: playlist_name }, { active: true }]
+      $and: [{ guild: { $eq: guild._id } }, { name: playlist_name }, { active: true }]
     }).populate({ path: 'songs', options: { sort: { order: 1 } } })
     return res.send({ ...playlist })
   },
@@ -55,5 +60,44 @@ module.exports = {
     guild.save()
 
     return res.send({ result })
+  },
+  async PlaylistClone(req, res) {
+    const { playlist_id } = req.params
+    const { guildId } = req.body
+    if (!playlist_id) return res.status(400).send({ error: 'No id provided' })
+    if (!guildId) return res.status(400).send({ error: 'No guild provided' })
+
+    const guild = await Guild.findById(guildId)
+    if (!guild) return res.status(400).send({ error: 'Guild does not exists' })
+
+    const oldPlaylist = await Playlist.findById(playlist_id).populate('songs')
+    if (!oldPlaylist) return res.status(400).send({ error: 'Playlist does not exists' })
+
+    const newPlaylist = await Playlist.create({
+      name: oldPlaylist.name,
+      comment: `Clonned from ${oldPlaylist.name}`,
+      active: oldPlaylist.active,
+      songs: [],
+      guild: guildId
+    })
+
+    oldPlaylist.songs = oldPlaylist.songs.map(song => {
+      song._id = undefined
+      song.__v = undefined
+      song.playlist = newPlaylist
+      return song
+    })
+
+    const newSongs = await Song.insertMany(oldPlaylist.songs)
+
+    if (newSongs) {
+      newSongs.forEach(song => {
+        newPlaylist.songs.push(song)
+      })
+    }
+
+    newPlaylist.save().catch(err => console.log(err))
+
+    return res.send({ playlist: newPlaylist })
   }
 }
