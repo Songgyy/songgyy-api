@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt');
-const SALT_WORK_FACTOR = 10;
+const { Schema, model } = require('mongoose')
+const bcrypt = require('bcrypt')
+const SALT_WORK_FACTOR = 10
 
 const UserSchema = new Schema(
   {
@@ -22,42 +22,44 @@ const UserSchema = new Schema(
       required: true,
       type: String
     },
-    guilds: [{
+    guilds: [
+      {
         ref: 'Guild',
         type: Schema.Types.ObjectId
-      }],
+      }
+    ]
   },
-    {
-      timestamps: true
-    }
-);
+  {
+    timestamps: true
+  }
+)
 
 // middleware to hash the password
 UserSchema.pre('save', function(next) {
-  let user = this;
+  let user = this
   // if no changse in password skip
-  if(!user.isModified('password')) return next();
+  if (!user.isModified('password')) return next()
 
   // generate a salt
   bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
-    if (err) return next(err);
+    if (err) return next(err)
     // hash the password
     bcrypt.hash(user.password, salt, (err, hash) => {
       if (err) return next(err)
 
       // override the password with the hash
-      user.password = hash;
-      return next();
-    });
-  });
-});
+      user.password = hash
+      return next()
+    })
+  })
+})
 
 // Method to compare the passwords
 UserSchema.methods.comparePassword = function(challenge, fn) {
   bcrypt.compare(challenge, this.password, (err, isMatch) => {
-    if (err) return fn(err);
-    fn(null, isMatch);
-  });
+    if (err) return fn(err)
+    fn(null, isMatch)
+  })
 }
 
-module.exports = model('User', UserSchema);
+module.exports = model('User', UserSchema)
