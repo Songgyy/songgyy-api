@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  api:
+    build: ./
+    restart: unless-stopped
+    volumes:
+      - ./src/:/app/src/
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+    links:
+      - mongo
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:4
+    restart: unless-stopped
+    volumes:
+      - ./mongo-data:/data/db
