@@ -1,14 +1,14 @@
 const express = require('express')
-const routes = require('./src/routes')
+const routes = require('./routes')
 const cors = require('cors')
-const db = require('./src/database')
+const db = require('./database')
 
 // create connection
 
 const app = express()
 
 // get the destination port
-const port = process.env.PORT || 3333
+const port = process.env.PORT || 3000
 
 // cors?
 app.use(cors())
