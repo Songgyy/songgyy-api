@@ -9,7 +9,7 @@ RUN apk --no-cache add --virtual builds-deps build-base python3
 
 RUN npm install
 
-COPY ./src /app
+COPY ./src /app/src
 
 EXPOSE 3000
 
