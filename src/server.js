@@ -2,6 +2,7 @@ const express = require('express')
 const routes = require('./routes')
 const cors = require('cors')
 const db = require('./database')
+const morgan = require('morgan')
 
 // create connection
 
@@ -12,6 +13,7 @@ const port = process.env.PORT || 3000
 
 // cors?
 app.use(cors())
+app.use(morgan('combined'))
 // use json, please
 app.use(express.json())
 // use routes, please
