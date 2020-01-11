@@ -18,8 +18,9 @@ routes.post(`${VERSION}/guilds`, authMiddleware, GuildController.store)
 // playlists routes
 routes.get(`${VERSION}/playlists/:playlist_name/:guild_id`, authMiddleware, (req, res) => PlaylistController(req, res).PlaylistSongs)
 // routes.post(`${VERSION}/playlists/:playlist_id/clone`, authMiddleware, PlaylistController.PlaylistClone)
-routes.get(`${VERSION}/playlists`, authMiddleware, (req, res) => PlaylistController(req, res).index)
-routes.post(`${VERSION}/playlists`, authMiddleware, (req, res) => PlaylistController(req, res).store)
+routes.get(`${VERSION}/playlists`, authMiddleware, PlaylistController.index)
+routes.post(`${VERSION}/playlists`, authMiddleware, PlaylistController.store)
+routes.delete(`${VERSION}/playlists/:playlist_id`, authMiddleware, PlaylistController.delete)
 //routes.delete(`${VERSION}/playlists`, authMiddleware, PlaylistController.remove);
 // songs routes
 routes.get(`${VERSION}/songs`, authMiddleware, SongController.index)
