@@ -4,7 +4,7 @@
   "description": "API for managing playlists and songs for the Songyy-bot for discord",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "nodemon src/server.js",
     "start": "node src/server.js"
   },
   "author": "Gabriel Petry",
@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.1",
+    "morgan": "^1.9.1",
     "saslprep": "^1.0.3"
   },
   "devDependencies": {
